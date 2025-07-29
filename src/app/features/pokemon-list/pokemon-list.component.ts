@@ -42,9 +42,9 @@ import { PokemonBorder } from '../../directives/pokemon-border';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="pokemon-list-container">
-      <!-- Toolbar avec filtres -->
-      <mat-toolbar color="primary" class="filters-toolbar">
-        <span>Pokédex</span>
+      <!-- Barre de filtres -->
+      <div class="filters-toolbar">
+        <span class="section-title">Pokédex</span>
         <span class="spacer"></span>
         
         <!-- Champ de recherche -->
@@ -68,18 +68,18 @@ import { PokemonBorder } from '../../directives/pokemon-border';
           </mat-select>
         </mat-form-field>
 
+        <!-- Statistiques -->
+        <div class="stats-section">
+          <mat-chip-set>
+            <mat-chip>{{ filteredPokemons().length }} Pokémon{{ filteredPokemons().length > 1 ? 's' : '' }}</mat-chip>
+            <mat-chip>{{ favoritesCount() }} Favori{{ favoritesCount() > 1 ? 's' : '' }}</mat-chip>
+          </mat-chip-set>
+        </div>
+
         <!-- Bouton pour les favoris -->
         <button mat-icon-button routerLink="/favorites" title="Mes favoris">
           <mat-icon>favorite</mat-icon>
         </button>
-      </mat-toolbar>
-
-      <!-- Statistiques -->
-      <div class="stats-bar">
-        <mat-chip-set>
-          <mat-chip>{{ filteredPokemons().length }} Pokémon{{ filteredPokemons().length > 1 ? 's' : '' }}</mat-chip>
-          <mat-chip>{{ favoritesCount() }} Favori{{ favoritesCount() > 1 ? 's' : '' }}</mat-chip>
-        </mat-chip-set>
       </div>
 
       <!-- Zone de contenu -->

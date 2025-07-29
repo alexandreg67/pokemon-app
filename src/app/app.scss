@@ -47,7 +47,7 @@
       @media (max-width: 768px) {
         padding: 8px 12px;
         
-        // Masquer le texte sur mobile, garder juste l'icône
+        // Masquer le texte sur mobile, garder juste l'icï¿½ne
         span:not(.mat-icon) {
           display: none;
         }
@@ -78,7 +78,7 @@
 
 .main-content {
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
   background-color: var(--mat-sys-surface-container-lowest);
 }
 
@@ -119,14 +119,14 @@
   }
 }
 
-// Styles pour améliorer l'accessibilité
+// Styles pour amï¿½liorer l'accessibilitï¿½
 button[mat-icon-button]:focus,
 button[mat-button]:focus {
   outline: 2px solid var(--mat-sys-primary);
   outline-offset: 2px;
 }
 
-// Styles pour le thème sombre (futur)
+// Styles pour le thï¿½me sombre (futur)
 @media (prefers-color-scheme: dark) {
   .main-content {
     background-color: var(--mat-sys-surface-container-lowest);
