@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
+import { lastValueFrom } from 'rxjs';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -172,11 +173,10 @@ import { PokemonBorder } from '../../directives/pokemon-border';
                         }
                       </div>
                       
-                      <!-- Total des stats -->
-                      <div class="total-stats">
-                        <strong>Total: {{ getTotalStats(poke) }}</strong>
-                      </div>
-                    </mat-card-content>
+<!-- Total des stats -->
+                        <div class="total-stats">
+                          <strong>Total: {{ totalStats() }}</strong>
+                        </div>                    </mat-card-content>
                   </mat-card>
                 }
               </div>
@@ -299,6 +299,12 @@ export class PokemonDetailComponent implements OnInit {
     return poke ? this.pokemonService.isFavorite(poke.id) : false;
   });
 
+  // Computed pour le total des statistiques
+  readonly totalStats = computed(() => {
+    const poke = this.pokemon();
+    return poke?.stats?.reduce((total, stat) => total + stat.base_stat, 0) || 0;
+  });
+
   constructor() {
     // Effect pour charger le Pokémon quand l'ID change
     effect(() => {
@@ -318,7 +324,8 @@ export class PokemonDetailComponent implements OnInit {
     this.error.set(null);
     
     try {
-      const pokemon = await this.pokemonService.getPokemonById(id).toPromise();
+      const pokemon$ = this.pokemonService.getPokemonById(id);
+      const pokemon = await lastValueFrom(pokemon$);
       if (pokemon) {
         this.pokemon.set(pokemon);
       } else {
@@ -378,7 +385,5 @@ export class PokemonDetailComponent implements OnInit {
     return 'stat-low';
   }
 
-  getTotalStats(pokemon: Pokemon): number {
-    return pokemon.stats?.reduce((total, stat) => total + stat.base_stat, 0) || 0;
-  }
+  
 }

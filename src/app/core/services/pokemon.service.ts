@@ -1,8 +1,8 @@
 import { Injectable, signal, computed, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Observable, BehaviorSubject, combineLatest, of } from 'rxjs';
-import { map, switchMap, shareReplay, catchError, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, BehaviorSubject, of, lastValueFrom } from 'rxjs';
+import { shareReplay, catchError, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Pokemon, PokemonListResponse, PokemonFilters } from '../models/pokemon.model';
 
 @Injectable({
@@ -67,9 +67,9 @@ export class PokemonService {
     
     try {
       // Load first 151 Pokemon (Gen 1)
-      const response = await this.http.get<PokemonListResponse>(
+      const response = await lastValueFrom(this.http.get<PokemonListResponse>(
         `${this.API_BASE}/pokemon?limit=151&offset=0`
-      ).toPromise();
+      ));
 
       if (response?.results) {
         // Load detailed data for each Pokemon
@@ -90,7 +90,7 @@ export class PokemonService {
   // Load detailed Pokemon data
   private async loadPokemonDetails(url: string): Promise<Pokemon | null> {
     try {
-      const pokemon = await this.http.get<Pokemon>(url).toPromise();
+      const pokemon = await lastValueFrom(this.http.get<Pokemon>(url));
       return pokemon || null;
     } catch (error) {
       console.error('Error loading pokemon details:', error);
@@ -176,9 +176,9 @@ export class PokemonService {
     this.loadingState.set(true);
     
     try {
-      const response = await this.http.get<PokemonListResponse>(
+      const response = await lastValueFrom(this.http.get<PokemonListResponse>(
         `${this.API_BASE}/pokemon?limit=${limit}&offset=${offset}`
-      ).toPromise();
+      ));
 
       if (response?.results) {
         const newPokemons = await Promise.all(
