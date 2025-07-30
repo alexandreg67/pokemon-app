@@ -1,5 +1,7 @@
 .home-container {
   min-height: 100vh;
+  height: 100%;
+  overflow-y: auto;
   background: linear-gradient(135deg, 
     var(--mat-sys-surface-container-lowest) 0%, 
     var(--mat-sys-primary-container) 100%);
@@ -185,6 +187,11 @@ section {
     padding: 40px 16px;
   }
   
+  // Add extra space for the last section to avoid content sticking to the bottom
+  &:last-of-type {
+    padding-bottom: 120px;
+  }
+
   h2 {
     font-size: 2.5rem;
     font-weight: 600;

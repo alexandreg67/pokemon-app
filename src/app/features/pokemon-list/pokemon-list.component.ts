@@ -102,89 +102,87 @@ import { PokemonBorder } from '../../directives/pokemon-border';
             </button>
           </div>
         }
-        <!-- Liste des Pokémon avec Virtual Scrolling -->
+        <!-- Liste des Pokémon -->
         @else {
-          <cdk-virtual-scroll-viewport 
-            itemSize="300" 
-            class="pokemon-viewport"
-            (scrolledIndexChange)="onScroll($event)">
-            
-            <div class="pokemon-grid">
-              @for (pokemon of filteredPokemons(); track pokemon.id; let i = $index) {
-                @if (pokemon.types && pokemon.types.length > 0) {
-                  <mat-card class="pokemon-card"
-                            [routerLink]="'/pokemon/' + pokemon.id"
-                            [class.favorite]="isFavorite(pokemon.id)"
-                            [appPokemonBorder]="pokemon.types[0].type.name">
-                    <mat-card-header>
-                      <mat-card-title>{{ pokemon.name | titlecase }}</mat-card-title>
-                      <mat-card-subtitle>#{{ pokemon.id.toString().padStart(3, '0') }}</mat-card-subtitle>
-                      
-                      <!-- Bouton favori -->
-                      <button mat-icon-button
-                              class="favorite-button"
-                              (click)="toggleFavorite($event, pokemon.id)"
-                              [attr.aria-label]="isFavorite(pokemon.id) ? 'Retirer des favoris' : 'Ajouter aux favoris'">
-                        <mat-icon [color]="isFavorite(pokemon.id) ? 'warn' : ''">
-                          {{ isFavorite(pokemon.id) ? 'favorite' : 'favorite_border' }}
-                        </mat-icon>
-                      </button>
-                    </mat-card-header>
+          <div class="pokemon-viewport">
+            @if (filteredPokemons().length === 0) {
+              <div class="no-results">
+                <mat-icon>search_off</mat-icon>
+                <h3>Aucun Pokémon trouvé</h3>
+                <p>Essayez de modifier vos critères de recherche</p>
+                <button mat-raised-button color="primary" (click)="clearFilters()">
+                  Effacer les filtres
+                </button>
+              </div>
+            } @else {
+              <div class="pokemon-grid">
+                @for (pokemon of filteredPokemons(); track pokemon.id; let i = $index) {
+                  @if (pokemon.types && pokemon.types.length > 0) {
+                    <mat-card class="pokemon-card"
+                              [routerLink]="'/pokemon/' + pokemon.id"
+                              [class.favorite]="isFavorite(pokemon.id)"
+                              [appPokemonBorder]="pokemon.types[0].type.name">
+                      <mat-card-header>
+                        <mat-card-title>{{ pokemon.name | titlecase }}</mat-card-title>
+                        <mat-card-subtitle>#{{ pokemon.id.toString().padStart(3, '0') }}</mat-card-subtitle>
+                        
+                        <!-- Bouton favori -->
+                        <button mat-icon-button
+                                class="favorite-button"
+                                (click)="toggleFavorite($event, pokemon.id)"
+                                [attr.aria-label]="isFavorite(pokemon.id) ? 'Retirer des favoris' : 'Ajouter aux favoris'">
+                          <mat-icon [color]="isFavorite(pokemon.id) ? 'warn' : ''">
+                            {{ isFavorite(pokemon.id) ? 'favorite' : 'favorite_border' }}
+                          </mat-icon>
+                        </button>
+                      </mat-card-header>
 
-                    <!-- Image du Pokémon -->
-                    <div class="pokemon-image-container">
-                      @if (pokemon.sprites?.other?.['official-artwork']?.front_default) {
-                        <img [src]="pokemon.sprites?.other?.['official-artwork']?.front_default || ''"
-                             [alt]="pokemon.name"
-                             class="pokemon-image"
-                             loading="lazy"
-                             (error)="onImageError($event, pokemon)">
-                      } @else if (pokemon.sprites?.front_default) {
-                        <img [src]="pokemon.sprites?.front_default || ''"
-                             [alt]="pokemon.name"
-                             class="pokemon-image"
-                             loading="lazy"
-                             (error)="onImageError($event, pokemon)">
-                      } @else {
-                        <div class="no-image">
-                          <mat-icon>catching_pokemon</mat-icon>
-                        </div>
-                      }
-                    </div>
-
-                    <mat-card-content>
-                      <!-- Types -->
-                      <div class="types-container">
-                        @for (typeInfo of pokemon.types; track typeInfo.type.name) {
-                          <mat-chip [class]="'type-' + typeInfo.type.name">
-                            {{ typeInfo.type.name | titlecase }}
-                          </mat-chip>
+                      <!-- Image du Pokémon -->
+                      <div class="pokemon-image-container">
+                        @if (pokemon.sprites?.other?.['official-artwork']?.front_default) {
+                          <img [src]="pokemon.sprites?.other?.['official-artwork']?.front_default || ''"
+                               [alt]="pokemon.name"
+                               class="pokemon-image"
+                               loading="lazy"
+                               (error)="onImageError($event, pokemon)">
+                        } @else if (pokemon.sprites?.front_default) {
+                          <img [src]="pokemon.sprites?.front_default || ''"
+                               [alt]="pokemon.name"
+                               class="pokemon-image"
+                               loading="lazy"
+                               (error)="onImageError($event, pokemon)">
+                        } @else {
+                          <div class="no-image">
+                            <mat-icon>catching_pokemon</mat-icon>
+                          </div>
                         }
                       </div>
 
-                      <!-- Stats de base -->
-                      @if (pokemon.stats && pokemon.stats.length > 0) {
-                        <div class="basic-stats">
-                          <span>HP: {{ getStatValue(pokemon, 'hp') }}</span>
-                          <span>ATK: {{ getStatValue(pokemon, 'attack') }}</span>
-                          <span>DEF: {{ getStatValue(pokemon, 'defense') }}</span>
+                      <mat-card-content>
+                        <!-- Types -->
+                        <div class="types-container">
+                          @for (typeInfo of pokemon.types; track typeInfo.type.name) {
+                            <mat-chip [class]="'type-' + typeInfo.type.name">
+                              {{ typeInfo.type.name | titlecase }}
+                            </mat-chip>
+                          }
                         </div>
-                      }
-                    </mat-card-content>
-                  </mat-card>
+
+                        <!-- Stats de base -->
+                        @if (pokemon.stats && pokemon.stats.length > 0) {
+                          <div class="basic-stats">
+                            <span>HP: {{ getStatValue(pokemon, 'hp') }}</span>
+                            <span>ATK: {{ getStatValue(pokemon, 'attack') }}</span>
+                            <span>DEF: {{ getStatValue(pokemon, 'defense') }}</span>
+                          </div>
+                        }
+                      </mat-card-content>
+                    </mat-card>
+                  }
                 }
-              } @empty {
-                <div class="no-results">
-                  <mat-icon>search_off</mat-icon>
-                  <h3>Aucun Pokémon trouvé</h3>
-                  <p>Essayez de modifier vos critères de recherche</p>
-                  <button mat-raised-button color="primary" (click)="clearFilters()">
-                    Effacer les filtres
-                  </button>
-                </div>
-              }
-            </div>
-          </cdk-virtual-scroll-viewport>
+              </div>
+            }
+          </div>
         }
       </div>
     </div>
