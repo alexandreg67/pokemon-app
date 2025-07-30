@@ -38,6 +38,8 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/home'
+    loadComponent: () => import('./features/page-not-found/page-not-found')
+      .then(m => m.PageNotFound),
+    title: "Page non trouvéé"
   }
 ];
