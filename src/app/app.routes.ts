@@ -21,6 +21,12 @@ export const routes: Routes = [
     title: 'Pokédex - Liste des Pokémon'
   },
   {
+    path: 'pokemon/edit/:id',
+    loadComponent: () => import('./features/pokemon-edit/pokemon-edit')
+      .then(m => m.PokemonEdit),
+    title:"Pokémon - Edit"
+  },
+  {
     path: 'pokemon/:id',
     loadComponent: () => import('./features/pokemon-detail/pokemon-detail.component')
       .then(m => m.PokemonDetailComponent),

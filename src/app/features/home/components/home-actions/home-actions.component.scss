@@ -1,0 +1,79 @@
+.actions-section {
+  background: var(--mat-sys-surface-container-low);
+  padding: 60px 24px;
+  
+  @media (max-width: 768px) {
+    padding: 40px 16px;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 0 48px 0;
+    color: var(--mat-sys-on-surface);
+    
+    @media (max-width: 768px) {
+      font-size: 2rem;
+      margin: 0 0 32px 0;
+    }
+  }
+  
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .action-card {
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--mat-sys-surface-container-high);
+    animation: slideInUp 0.6s ease-out;
+    
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+    
+    mat-card-content {
+      text-align: center;
+      padding: 32px 24px;
+      
+      .action-icon {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 16px;
+      }
+      
+      h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 0 0 12px 0;
+        color: var(--mat-sys-on-surface);
+      }
+      
+      p {
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0;
+        line-height: 1.5;
+      }
+    }
+  }
+}
+
+// Animation pour les cartes
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

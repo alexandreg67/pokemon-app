@@ -1,0 +1,154 @@
+.featured-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  
+  @media (max-width: 768px) {
+    padding: 40px 16px;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 0 48px 0;
+    color: var(--mat-sys-on-surface);
+    
+    @media (max-width: 768px) {
+      font-size: 2rem;
+      margin: 0 0 32px 0;
+    }
+  }
+  
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 60px 0;
+    
+    p {
+      color: var(--mat-sys-on-surface-variant);
+    }
+  }
+  
+  .featured-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  
+  .featured-card {
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--mat-sys-surface-container-high);
+    animation: slideInUp 0.6s ease-out;
+    
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    }
+    
+    .featured-image-container {
+      height: 180px;
+      background: linear-gradient(135deg, 
+        var(--mat-sys-primary-container) 0%, 
+        var(--mat-sys-secondary-container) 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      
+      .featured-image {
+        max-width: 140px;
+        max-height: 140px;
+        object-fit: contain;
+        filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+        transition: transform 0.3s ease;
+      }
+      
+      .no-image {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        color: var(--mat-sys-on-primary-container);
+        opacity: 0.6;
+        
+        mat-icon {
+          font-size: 64px;
+          width: 64px;
+          height: 64px;
+        }
+      }
+    }
+    
+    &:hover .featured-image {
+      transform: scale(1.1);
+    }
+    
+    mat-card-content {
+      padding: 20px;
+      
+      h3 {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin: 0 0 8px 0;
+        color: var(--mat-sys-on-surface);
+      }
+      
+      .pokemon-id {
+        color: var(--mat-sys-on-surface-variant);
+        margin: 0 0 16px 0;
+        font-weight: 500;
+      }
+      
+      .types-container {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        
+        mat-chip {
+          font-size: 0.75rem;
+          font-weight: 600;
+          
+          // Types colors
+          &.type-fire { background-color: #ff6b6b; color: white; }
+          &.type-water { background-color: #4ecdc4; color: white; }
+          &.type-grass { background-color: #51cf66; color: white; }
+          &.type-electric { background-color: #ffd43b; color: #333; }
+          &.type-psychic { background-color: #da77f2; color: white; }
+          &.type-ice { background-color: #74c0fc; color: white; }
+          &.type-dragon { background-color: #845ef7; color: white; }
+          &.type-dark { background-color: #495057; color: white; }
+          &.type-fairy { background-color: #f783ac; color: white; }
+          &.type-normal { background-color: #adb5bd; color: white; }
+          &.type-fighting { background-color: #f76707; color: white; }
+          &.type-poison { background-color: #9775fa; color: white; }
+          &.type-ground { background-color: #fab005; color: white; }
+          &.type-flying { background-color: #91a7ff; color: white; }
+          &.type-bug { background-color: #8ce99a; color: white; }
+          &.type-rock { background-color: #868e96; color: white; }
+          &.type-ghost { background-color: #6c5ce7; color: white; }
+          &.type-steel { background-color: #ced4da; color: #333; }
+        }
+      }
+    }
+  }
+}
+
+// Animation pour les cartes
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

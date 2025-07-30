@@ -1,0 +1,89 @@
+.types-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px 24px;
+  
+  // Add extra space for the last section to avoid content sticking to the bottom
+  padding-bottom: 120px;
+  
+  @media (max-width: 768px) {
+    padding: 40px 16px 120px 16px;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 0 48px 0;
+    color: var(--mat-sys-on-surface);
+    
+    @media (max-width: 768px) {
+      font-size: 2rem;
+      margin: 0 0 32px 0;
+    }
+  }
+  
+  .types-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  
+  .type-button {
+    padding: 16px 28px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 32px;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 120px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    
+    &:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    &:active {
+      transform: translateY(-1px) scale(1.02);
+    }
+    
+    // Types colors
+    &.type-fire { 
+      background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+      color: white;
+      &:hover { box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4); }
+    }
+    &.type-water { 
+      background: linear-gradient(135deg, #4ecdc4, #44a08d);
+      color: white;
+      &:hover { box-shadow: 0 8px 20px rgba(78, 205, 196, 0.4); }
+    }
+    &.type-grass { 
+      background: linear-gradient(135deg, #51cf66, #40c057);
+      color: white;
+      &:hover { box-shadow: 0 8px 20px rgba(81, 207, 102, 0.4); }
+    }
+    &.type-electric { 
+      background: linear-gradient(135deg, #ffd43b, #fab005);
+      color: #333;
+      &:hover { box-shadow: 0 8px 20px rgba(255, 212, 59, 0.4); }
+    }
+    &.type-psychic { 
+      background: linear-gradient(135deg, #da77f2, #cc5de8);
+      color: white;
+      &:hover { box-shadow: 0 8px 20px rgba(218, 119, 242, 0.4); }
+    }
+    &.type-dragon { 
+      background: linear-gradient(135deg, #845ef7, #7048e8);
+      color: white;
+      &:hover { box-shadow: 0 8px 20px rgba(132, 94, 247, 0.4); }
+    }
+  }
+}

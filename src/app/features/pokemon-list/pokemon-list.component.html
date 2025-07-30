@@ -1,0 +1,145 @@
+<div class="pokemon-list-container">
+  <!-- Barre de filtres -->
+  <div class="filters-toolbar">
+    <span class="section-title">Pokédex</span>
+    <span class="spacer"></span>
+    
+    <!-- Champ de recherche -->
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Rechercher un Pokémon</mat-label>
+      <input matInput 
+             [value]="searchTerm()"
+             (input)="onSearchChange($event)"
+             placeholder="Pikachu, Charizard...">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <!-- Filtre par type -->
+    <mat-form-field appearance="outline" class="type-filter">
+      <mat-label>Filtrer par type</mat-label>
+      <mat-select [value]="selectedType()" (selectionChange)="onTypeChange($event.value)">
+        <mat-option [value]="null">Tous les types</mat-option>
+        @for (type of availableTypes(); track type) {
+          <mat-option [value]="type">{{ type | titlecase }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Statistiques -->
+    <div class="stats-section">
+      <mat-chip-set>
+        <mat-chip>{{ filteredPokemons().length }} Pokémon{{ filteredPokemons().length > 1 ? 's' : '' }}</mat-chip>
+        <mat-chip>{{ favoritesCount() }} Favori{{ favoritesCount() > 1 ? 's' : '' }}</mat-chip>
+      </mat-chip-set>
+    </div>
+
+    <!-- Bouton pour les favoris -->
+    <button mat-icon-button routerLink="/favorites" title="Mes favoris">
+      <mat-icon>favorite</mat-icon>
+    </button>
+  </div>
+
+  <!-- Zone de contenu -->
+  <div class="content-area">
+    <!-- État de chargement -->
+    @if (isLoading()) {
+      <div class="loading-container">
+        <mat-progress-spinner mode="indeterminate" diameter="80"></mat-progress-spinner>
+        <p>Chargement des Pokémon...</p>
+      </div>
+    } 
+    <!-- Erreur -->
+    @else if (error()) {
+      <div class="error-container">
+        <mat-icon color="warn">error</mat-icon>
+        <h3>Erreur de chargement</h3>
+        <p>{{ error() }}</p>
+        <button mat-raised-button color="primary" (click)="retryLoading()">
+          Réessayer
+        </button>
+      </div>
+    }
+    <!-- Liste des Pokémon -->
+    @else {
+      <div class="pokemon-viewport">
+        @if (filteredPokemons().length === 0) {
+          <div class="no-results">
+            <mat-icon>search_off</mat-icon>
+            <h3>Aucun Pokémon trouvé</h3>
+            <p>Essayez de modifier vos critères de recherche</p>
+            <button mat-raised-button color="primary" (click)="clearFilters()">
+              Effacer les filtres
+            </button>
+          </div>
+        } @else {
+          <div class="pokemon-grid">
+            @for (pokemon of filteredPokemons(); track pokemon.id; let i = $index) {
+              @if (pokemon.types && pokemon.types.length > 0) {
+                <mat-card class="pokemon-card"
+                          [routerLink]="'/pokemon/' + pokemon.id"
+                          [class.favorite]="isFavorite(pokemon.id)"
+                          [appPokemonBorder]="pokemon.types[0].type.name">
+                  <mat-card-header>
+                    <mat-card-title>{{ pokemon.name | titlecase }}</mat-card-title>
+                    <mat-card-subtitle>#{{ pokemon.id.toString().padStart(3, '0') }}</mat-card-subtitle>
+                    
+                    <!-- Bouton favori -->
+                    <button mat-icon-button
+                            class="favorite-button"
+                            (click)="toggleFavorite($event, pokemon.id)"
+                            [attr.aria-label]="isFavorite(pokemon.id) ? 'Retirer des favoris' : 'Ajouter aux favoris'">
+                      <mat-icon [color]="isFavorite(pokemon.id) ? 'warn' : ''">
+                        {{ isFavorite(pokemon.id) ? 'favorite' : 'favorite_border' }}
+                      </mat-icon>
+                    </button>
+                  </mat-card-header>
+
+                  <!-- Image du Pokémon -->
+                  <div class="pokemon-image-container">
+                    @if (pokemon.sprites?.other?.['official-artwork']?.front_default) {
+                      <img [src]="pokemon.sprites?.other?.['official-artwork']?.front_default || ''"
+                           [alt]="pokemon.name"
+                           class="pokemon-image"
+                           loading="lazy"
+                           (error)="onImageError($event, pokemon)">
+                    } @else if (pokemon.sprites?.front_default) {
+                      <img [src]="pokemon.sprites?.front_default || ''"
+                           [alt]="pokemon.name"
+                           class="pokemon-image"
+                           loading="lazy"
+                           (error)="onImageError($event, pokemon)">
+                    } @else {
+                      <div class="no-image">
+                        <mat-icon>catching_pokemon</mat-icon>
+                      </div>
+                    }
+                  </div>
+
+                  <mat-card-content>
+                    <!-- Types -->
+                    <div class="types-container">
+                      @for (typeInfo of pokemon.types; track typeInfo.type.name) {
+                        <mat-chip [class]="'type-' + typeInfo.type.name">
+                          {{ typeInfo.type.name | titlecase }}
+                        </mat-chip>
+                      }
+                    </div>
+
+                    <!-- Stats de base -->
+                    @if (pokemon.stats && pokemon.stats.length > 0) {
+                      <div class="basic-stats">
+                        <span>HP: {{ getStatValue(pokemon, 'hp') }}</span>
+                        <span>ATK: {{ getStatValue(pokemon, 'attack') }}</span>
+                        <span>DEF: {{ getStatValue(pokemon, 'defense') }}</span>
+                      </div>
+                    }
+                  </mat-card-content>
+                </mat-card>
+              }
+            }
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

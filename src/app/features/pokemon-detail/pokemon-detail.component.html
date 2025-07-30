@@ -1,0 +1,85 @@
+<div class="pokemon-detail-container">
+  <!-- Toolbar de navigation -->
+  <mat-toolbar color="primary" class="detail-toolbar">
+    <button mat-icon-button (click)="goBack()" title="Retour">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    
+    @if (pokemon(); as poke) {
+      <span class="pokemon-title">{{ poke.name | titlecase }}</span>
+      <span class="spacer"></span>
+      <span class="pokemon-id">#{{ poke.id.toString().padStart(3, '0') }}</span>
+      
+      <button mat-icon-button
+              (click)="toggleFavorite()"
+              [title]="isFavorite() ? 'Retirer des favoris' : 'Ajouter aux favoris'">
+        <mat-icon [color]="isFavorite() ? 'warn' : ''">
+          {{ isFavorite() ? 'favorite' : 'favorite_border' }}
+        </mat-icon>
+      </button>
+    }
+  </mat-toolbar>
+
+  <!-- Contenu principal -->
+  <div class="detail-content">
+    @if (isLoading()) {
+      <div class="loading-container">
+        <mat-progress-spinner mode="indeterminate" diameter="80"></mat-progress-spinner>
+        <p>Chargement des détails...</p>
+      </div>
+    } @else if (error()) {
+      <div class="error-container">
+        <mat-icon color="warn">error</mat-icon>
+        <h3>Erreur de chargement</h3>
+        <p>{{ error() }}</p>
+        <button mat-raised-button color="primary" (click)="retry()">
+          Réessayer
+        </button>
+      </div>
+    } @else {
+      @if (pokemon(); as poke) {
+        <!-- Carte héro -->
+        <app-pokemon-hero [pokemon]="poke"></app-pokemon-hero>
+
+        <!-- Onglets avec détails -->
+        <mat-tab-group class="detail-tabs">
+          <!-- Onglet Statistiques -->
+          @if (poke.stats) {
+            <mat-tab label="Statistiques">
+              <div class="tab-content">
+                <app-pokemon-stats [stats]="poke.stats"></app-pokemon-stats>
+              </div>
+            </mat-tab>
+          }
+
+          <!-- Onglet Capacités -->
+          @if (poke.abilities) {
+            <mat-tab label="Capacités">
+              <div class="tab-content">
+                <app-pokemon-abilities [abilities]="poke.abilities"></app-pokemon-abilities>
+              </div>
+            </mat-tab>
+          }
+
+          <!-- Onglet Sprites -->
+          @if (poke.sprites) {
+            <mat-tab label="Images">
+              <div class="tab-content">
+                <app-pokemon-sprites 
+                  [sprites]="poke.sprites" 
+                  [pokemonName]="poke.name">
+                </app-pokemon-sprites>
+              </div>
+            </mat-tab>
+          }
+        </mat-tab-group>
+
+        <!-- Navigation -->
+        <app-pokemon-navigation 
+          [pokemonId]="poke.id"
+          (navigateToPokemon)="navigateToPokemon($event)">
+        </app-pokemon-navigation>
+      }
+    }
+  </div>
+</div>
